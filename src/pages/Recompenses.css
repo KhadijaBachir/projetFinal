@@ -1,0 +1,250 @@
+/* Style général du conteneur */
+.recompenses-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #ff6f61; /* Fond de la page */
+  color: #ffffff; /* Texte en blanc */
+  min-height: 100vh;
+}
+
+/* Titres */
+h1, h2, h3 {
+  color: #ffffff; /* Titres en blanc */
+  margin-bottom: 1rem;
+}
+
+/* Section de félicitations */
+.congrats-message {
+  background-color: #ff8c7f; /* Fond des niveaux */
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #ffffff;
+}
+
+.congrats-message:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Affichage des points */
+.points-display {
+  background-color: #ffffff; /* Fond blanc */
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.points-display:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.points-display h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.points-display p {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ff6f61; /* Couleur principale */
+}
+
+/* Liste des niveaux */
+.levels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Conteneur de niveau */
+.level-container {
+  background-color: #ff8c7f; /* Fond des niveaux */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.level-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.level-container h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.level-container p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* Grille des récompenses */
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 récompenses par ligne */
+  gap: 15px;
+}
+
+/* Carte de récompense */
+.reward-card {
+  background-color: #ffffff; /* Fond blanc */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 2px solid transparent; /* Bordure transparente par défaut */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.reward-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.reward-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #ff6f61; /* Couleur principale */
+}
+
+.reward-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+/* Bouton de déblocage */
+.unlock-button {
+  background-color: #ff6f61; /* Couleur principale */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.unlock-button:hover {
+  background-color: #e65a50; /* Couleur au survol */
+  transform: translateY(-2px);
+}
+
+.unlock-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Vidéo de motivation */
+.motivation-video {
+  background-color: #ffffff; /* Fond blanc */
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.motivation-video:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.motivation-video h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.motivation-video a {
+  color: #ff6f61; /* Couleur principale */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.motivation-video a:hover {
+  color: #e65a50; /* Couleur au survol */
+}
+
+/* Message de motivation */
+.motivation-message {
+  background-color: #ffffff; /* Fond blanc */
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.motivation-message:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.motivation-message p {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Liste des catégories (défis hebdomadaires, saisonniers, spéciaux) */
+.category-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cartes par ligne */
+  gap: 15px;
+  margin-bottom: 20px;
+  background-color: #ff8c7f; /* Fond des niveaux */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Style des cartes de catégorie */
+.category-list .reward-card {
+  background-color: #ffffff; /* Fond blanc */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 2px solid transparent; /* Bordure transparente par défaut */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.category-list .reward-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.category-list .reward-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #ff6f61; /* Couleur principale */
+}
+
+.category-list .reward-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
