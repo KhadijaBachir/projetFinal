@@ -131,7 +131,7 @@ const defaultChallenges = {
  
 
   ],
-  "Religion":[
+  "religion":[
     {
       id: " nkzly3eg4UleMZliqPZn ",
       name: " Faire mes 5 prières",
@@ -152,7 +152,7 @@ const defaultChallenges = {
     },
 
   ],
-  "Bien-etre":[
+  "bien-etre":[
     {
       id: " EUT7aqCDPeFKlAEX0zZU ",
       name: " Méditer 10 minutes par jour",
@@ -173,7 +173,7 @@ const defaultChallenges = {
     },
 
   ],
-  "Etudes": [
+  "etudes": [
   {
     id: " Y6ZRGjaiWUjoOjRyU1R6 ",
     name: "Apprendre mes leçons",
@@ -217,7 +217,7 @@ const defaultChallenges = {
     icon: "FaBook",
   },
  ],
- "Developpement-personnel": [
+ "developpement-personnel": [
   {
     id: "WqrQBsVHJmL7c222xxAS",
     name: "Écrire 3 choses positives sur ma journée",

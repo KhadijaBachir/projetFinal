@@ -9,7 +9,42 @@ import CategoriesList from "./pages/CategoriesList";
 import Profile from "./pages/Profile";
 import CategoryDetails from "./pages/CategoryDetails";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { addUserChallenge } from "./firebaseConfig"; // Remplacement de l'import
+
+// Fonctions utilitaires pour localStorage
+const initializeLocalStorage = () => {
+  if (!localStorage.getItem('userChallenges')) {
+    localStorage.setItem('userChallenges', JSON.stringify([]));
+  }
+  if (!localStorage.getItem('challengesState')) {
+    localStorage.setItem('challengesState', JSON.stringify({}));
+  }
+  if (!localStorage.getItem('userData')) {
+    localStorage.setItem('userData', JSON.stringify({
+      points: 0,
+      rewards: [],
+      completedChallenges: []
+    }));
+  }
+};
+
+const addUserChallenge = (challenge) => {
+  const challenges = JSON.parse(localStorage.getItem('userChallenges')) || [];
+  const newChallenge = {
+    id: `uc${Date.now()}`,
+    name: challenge.title,
+    description: challenge.description,
+    category: challenge.category,
+    points: challenge.points,
+    color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+    createdAt: new Date().toISOString()
+  };
+  localStorage.setItem('userChallenges', JSON.stringify([...challenges, newChallenge]));
+};
+
+const checkChallengesExist = () => {
+  const challenges = JSON.parse(localStorage.getItem('userChallenges')) || [];
+  return challenges.length > 0;
+};
 
 const App = () => {
   // Données des défis à envoyer
@@ -26,21 +61,21 @@ const App = () => {
       category: "nutrition",
       points: 15
     }
-    // Ajoutez d'autres défis si nécessaire
   ];
 
-  // Envoyer les défis au démarrage
+  // Initialiser le localStorage et les défis au démarrage
   useEffect(() => {
-    const initializeChallenges = async () => {
+    initializeLocalStorage();
+    
+    const initializeChallenges = () => {
       try {
-        // Vérifier d'abord si des défis existent déjà
-        const challengesExist = await checkChallengesExist();
+        const challengesExist = checkChallengesExist();
         
         if (!challengesExist) {
-          for (const challenge of initialChallenges) {
-            await addUserChallenge(challenge);
-          }
-          console.log("Défis initiaux ajoutés avec succès");
+          initialChallenges.forEach(challenge => {
+            addUserChallenge(challenge);
+          });
+          console.log("Défis initiaux ajoutés avec succès dans localStorage");
         }
       } catch (error) {
         console.error("Erreur lors de l'initialisation des défis :", error);
@@ -53,7 +88,6 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Vos routes existantes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/deadline" element={<Deadline />} />
@@ -67,12 +101,5 @@ const App = () => {
     </Router>
   );
 };
-
-// Fonction pour vérifier si des défis existent déjà
-async function checkChallengesExist() {
-  // Implémentation dépend de votre structure Firestore
-  // Par exemple, vérifier si la collection 'challenges' contient des documents
-  // Vous devrez peut-être importer db et getDocs depuis firebaseConfig
-}
 
 export default App;
