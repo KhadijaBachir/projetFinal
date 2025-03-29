@@ -229,16 +229,24 @@ const CategoriesList = () => {
 
         {/* Styles globaux pour l'animation du logo */}
         <style>
-          {`
-            @keyframes spin {
-              0% {
-                transform: rotateY(0deg);
-              }
-              100% {
-                transform: rotateY(360deg);
-              }
-            }
-          `}
+        {`
+    @keyframes cardEntrance {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .animate-card {
+      animation: cardEntrance 0.6s ease-out forwards;
+      opacity: 0;
+    }
+  `}
+         
         </style>
       </Navbar>
 
@@ -257,7 +265,10 @@ const CategoriesList = () => {
           {/* Sport */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.1s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -275,7 +286,10 @@ const CategoriesList = () => {
           {/* Nutrition */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.2s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -293,7 +307,10 @@ const CategoriesList = () => {
           {/* Travail */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.3s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -311,7 +328,10 @@ const CategoriesList = () => {
           {/* Tâches ménagères */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.4s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -329,7 +349,10 @@ const CategoriesList = () => {
           {/* Bien-être */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+             style={{ 
+              ...styles.categoryCard,
+              animationDelay: "0.5s"
+            }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -351,7 +374,10 @@ const CategoriesList = () => {
           {/* Religion */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+             style={{ 
+              ...styles.categoryCard,
+              animationDelay: "0.6s"
+            }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -373,7 +399,10 @@ const CategoriesList = () => {
           {/* Études */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.7s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -395,7 +424,10 @@ const CategoriesList = () => {
           {/* Tâches repoussées */}
           <Col md={3} className="mb-4">
             <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.8s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -413,7 +445,10 @@ const CategoriesList = () => {
           {/* Developpement-personnel */}
           <Col md={3} className="mb-4">
            <Card
-              style={styles.categoryCard}
+              style={{ 
+                ...styles.categoryCard,
+                animationDelay: "0.9s"
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -434,7 +469,10 @@ const CategoriesList = () => {
            {/* Autres Défis */}
           <Col md={3} className="mb-4">
         <Card
-          style={styles.categoryCard}
+          style={{ 
+            ...styles.categoryCard,
+            animationDelay: "0.10s"
+          }}
           onMouseEnter={handleMouseEnter}
          onMouseLeave={handleMouseLeave}
         >

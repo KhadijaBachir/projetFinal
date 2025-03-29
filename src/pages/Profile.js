@@ -1,194 +1,202 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, ListGroup, Button } from "react-bootstrap";
-import { FaTrash, FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { db, auth } from "../firebaseConfig"; // Importez `auth` pour récupérer l'ID de l'utilisateur connecté
-import { doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
+import { Container, Card, Image, Table, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { FaUserCircle, FaUpload, FaTrophy, FaHistory, FaSignOutAlt } from "react-icons/fa";
+import { 
+  getUserData, 
+  uploadProfilePhoto,
+  onAuthStateChange,
+  logoutUser
+} from "../firebaseConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserChallenges } from "./userChallenges";
 
 const Profile = () => {
-  const [completedChallenges, setCompletedChallenges] = useState([]); // État pour les défis accomplis
-  const [userChallenges, setUserChallenges] = useState([]); // État pour les défis personnalisés
-  const [showAll, setShowAll] = useState(false); // État pour afficher tous les défis
-  const userId = auth.currentUser?.uid; // Récupérer l'ID de l'utilisateur connecté
+  const [user, setUser] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Récupérer les défis accomplis depuis Firestore en temps réel
   useEffect(() => {
-    if (!userId) {
-      console.error("Aucun utilisateur connecté !");
-      return;
-    }
-
-    const userRef = doc(db, "users", userId);
-
-    // Écouter les changements en temps réel
-    const unsubscribe = onSnapshot(userRef, (userDoc) => {
-      if (userDoc.exists()) {
-        const challengesState = userDoc.data().challengesState || {};
-        const completed = Object.entries(challengesState)
-          .filter(([_, challenge]) => challenge.isCompleted) // Filtrer les défis accomplis
-          .map(([challengeId, challenge]) => ({
-            id: challengeId,
-            name: challenge.challengeName || "Défi personnalisé", // Nom du défi
-            description: challenge.userGoals || "Aucune description", // Description du défi
-            completionDate: challenge.completionDate || new Date().toISOString(), // Date d'accomplissement
-          }))
-          .sort((a, b) => new Date(b.completionDate) - new Date(a.completionDate)); // Trier par date décroissante
-
-        setCompletedChallenges(completed);
+    const unsubscribe = onAuthStateChange(async (authUser) => {
+      if (authUser) {
+        const userUnsubscribe = getUserData(authUser.uid, (data) => {
+          setUser({
+            uid: authUser.uid,
+            email: authUser.email,
+            ...data
+          });
+          setLoading(false);
+        });
+        return () => userUnsubscribe();
       } else {
-        console.error("Aucun document utilisateur trouvé !");
+        setUser(null);
+        setLoading(false);
       }
     });
-
-    // Nettoyer l'écouteur lors du démontage du composant
     return () => unsubscribe();
-  }, [userId]);
+  }, []);
 
-  // Récupérer les défis personnalisés
-  useEffect(() => {
-    if (!userId) return;
-
-    const unsubscribe = getUserChallenges("defaultCategory", setUserChallenges);
-    return () => unsubscribe();
-  }, [userId]);
-
-  // Combiner les défis accomplis et les défis personnalisés
-  const allChallenges = [
-    ...completedChallenges,
-    ...userChallenges.map((challenge) => ({
-      id: challenge.id,
-      name: challenge.name || "Défi personnalisé", // Nom du défi
-      description: challenge.description || "Aucune description", // Description du défi
-      completionDate: challenge.createdAt || new Date().toISOString(), // Date de création
-    })),
-  ];
-
-  // Supprimer un défi accompli
-  const handleDeleteChallenge = async (challengeId) => {
+  const handleImageUpload = async () => {
+    if (!profileImage || !user?.uid) return;
+    
+    setUploading(true);
     try {
-      const userRef = doc(db, "users", userId);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists()) {
-        const challengesState = userDoc.data().challengesState || {};
-        delete challengesState[challengeId]; // Supprimer le défi de l'état
-
-        // Mettre à jour Firestore
-        await updateDoc(userRef, { challengesState });
-        setCompletedChallenges((prev) => prev.filter((challenge) => challenge.id !== challengeId));
-
-        toast.success("Défi supprimé avec succès !", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-      }
+      await uploadProfilePhoto(user.uid, profileImage);
+      toast.success("Photo de profil mise à jour !");
+      setProfileImage(null);
     } catch (error) {
-      console.error("Erreur lors de la suppression du défi :", error);
-      toast.error("Erreur lors de la suppression du défi.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      toast.error("Erreur lors de l'upload : " + error.message);
+    } finally {
+      setUploading(false);
     }
   };
 
-  // Afficher seulement les 3 derniers défis par défaut
-  const displayedChallenges = showAll ? allChallenges : allChallenges.slice(0, 3);
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Déconnexion réussie");
+    } catch (error) {
+      toast.error("Erreur de déconnexion : " + error.message);
+    }
+  };
+
+  if (loading) return (
+    <Container className="text-center mt-5">
+      <Spinner animation="border" />
+    </Container>
+  );
+
+  if (!user) return (
+    <Container>
+      <Alert variant="danger">Veuillez vous connecter pour accéder à votre profil</Alert>
+    </Container>
+  );
 
   return (
-    <div style={{ backgroundColor: "#ff6f61", minHeight: "100vh", paddingTop: "80px" }}>
-      <Container>
-        <h1 className="text-center mb-4" style={{ color: "#fff", fontSize: "2.5rem", fontWeight: "bold" }}>
-          Mon Profil
-        </h1>
-
-        {/* Informations personnelles */}
-        <Card style={{ borderRadius: "15px", padding: "20px", maxWidth: "600px", margin: "0 auto", marginBottom: "20px" }}>
-          <Card.Body>
-            <h2 style={{ fontSize: "1.8rem", fontWeight: "bold", color: "#333" }}>Informations personnelles</h2>
-            <p style={{ fontSize: "1.2rem", color: "#555" }}>
-              Nom: John Doe
-              <br />
-              Email: john.doe@example.com
-              <br />
-              Points: 1200
-            </p>
-          </Card.Body>
-        </Card>
-
-        {/* Défis accomplis */}
-        <Card style={{ borderRadius: "15px", padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-          <Card.Body>
-            <h2 style={{ fontSize: "1.8rem", fontWeight: "bold", color: "#333", marginBottom: "20px" }}>
-              Défis Accomplis
-            </h2>
-            {displayedChallenges.length > 0 ? (
-              <>
-                <ListGroup>
-                  {displayedChallenges.map((challenge) => (
-                    <ListGroup.Item
-                      key={challenge.id}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                        borderRadius: "10px",
-                        padding: "10px",
-                        backgroundColor: "#f8f9fa",
-                      }}
-                    >
-                      <div>
-                        <span style={{ fontSize: "1.2rem", color: "#333" }}>{challenge.name}</span>
-                        <br />
-                        <small style={{ fontSize: "0.9rem", color: "#777" }}>
-                          Description : {challenge.description} {/* Afficher la description */}
-                        </small>
-                        <br />
-                        <small style={{ fontSize: "0.9rem", color: "#777" }}>
-                          Accompli le : {new Date(challenge.completionDate).toLocaleDateString()} à{" "}
-                          {new Date(challenge.completionDate).toLocaleTimeString()}
-                        </small>
-                      </div>
-                      <Button
-                        variant="danger"
-                        onClick={() => handleDeleteChallenge(challenge.id)}
-                        style={{ padding: "5px 10px", borderRadius: "5px" }}
-                      >
-                        <FaTrash />
-                      </Button>
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-                {allChallenges.length > 3 && (
-                  <Button
-                    variant="link"
-                    onClick={() => setShowAll(!showAll)}
-                    style={{ width: "100%", textAlign: "center", marginTop: "10px" }}
-                  >
-                    {showAll ? "Voir moins" : "Voir plus"} {showAll ? <FaChevronUp /> : <FaChevronDown />}
-                  </Button>
-                )}
-              </>
-            ) : (
-              <p style={{ fontSize: "1.2rem", color: "#555", textAlign: "center" }}>
-                Aucun défi accompli pour le moment.
-              </p>
-            )}
-          </Card.Body>
-        </Card>
-      </Container>
+    <Container className="py-4">
       <ToastContainer />
-    </div>
+      
+      <Card className="mb-4">
+        <Card.Body className="text-center">
+          <div className="position-relative mb-3">
+            {user.photoURL ? (
+              <Image 
+                src={user.photoURL} 
+                roundedCircle 
+                style={{ width: 150, height: 150, objectFit: 'cover' }}
+                alt="Photo de profil"
+              />
+            ) : (
+              <FaUserCircle size={150} className="text-secondary" />
+            )}
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={(e) => setProfileImage(e.target.files[0])}
+              style={{ display: 'none' }}
+              id="profileUpload"
+            />
+            <Button
+              variant="primary"
+              size="sm"
+              className="position-absolute bottom-0 end-0 rounded-circle"
+              onClick={() => document.getElementById('profileUpload').click()}
+              disabled={uploading}
+            >
+              <FaUpload />
+            </Button>
+          </div>
+
+          {profileImage && (
+            <div className="mb-3">
+              <Button 
+                variant="success" 
+                onClick={handleImageUpload}
+                disabled={uploading}
+                className="me-2"
+              >
+                {uploading ? 'Envoi en cours...' : 'Enregistrer'}
+              </Button>
+              <Button 
+                variant="outline-secondary" 
+                onClick={() => setProfileImage(null)}
+                disabled={uploading}
+              >
+                Annuler
+              </Button>
+            </div>
+          )}
+
+          <h2>{user.name || 'Utilisateur'}</h2>
+          <p className="text-muted">{user.email}</p>
+          <div className="badge bg-primary fs-5 mb-3">
+            {user.points || 0} points
+          </div>
+          <Button variant="danger" onClick={handleLogout}>
+            <FaSignOutAlt /> Déconnexion
+          </Button>
+        </Card.Body>
+      </Card>
+
+      <Card className="mb-4">
+        <Card.Header>
+          <FaTrophy className="me-2" />
+          Mes Récompenses
+        </Card.Header>
+        <Card.Body>
+          {user.rewards?.length > 0 ? (
+            <ul className="list-unstyled">
+              {user.rewards.map((reward, i) => (
+                <li key={i} className="mb-2 d-flex align-items-center">
+                  <span className="fs-4 me-2">{reward.icon}</span>
+                  <div>
+                    <strong>{reward.name}</strong>
+                    <div className="text-muted small">
+                      Débloqué le {new Date(reward.dateUnlocked).toLocaleDateString()}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-center text-muted">Aucune récompense encore</p>
+          )}
+        </Card.Body>
+      </Card>
+
+      <Card>
+        <Card.Header>
+          <FaHistory className="me-2" />
+          Historique des Défis
+        </Card.Header>
+        <Card.Body>
+          {user.challengesState ? (
+            <Table striped hover responsive>
+              <thead>
+                <tr>
+                  <th>Défi</th>
+                  <th>Date</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(user.challengesState)
+                  .filter(([_, challenge]) => challenge.isCompleted)
+                  .map(([id, challenge]) => (
+                    <tr key={id}>
+                      <td>{challenge.challengeName}</td>
+                      <td>{new Date(challenge.completionDate).toLocaleDateString()}</td>
+                      <td>+{challenge.points || 5}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          ) : (
+            <p className="text-center text-muted">Aucun défi complété</p>
+          )}
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 

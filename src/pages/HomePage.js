@@ -130,7 +130,6 @@ const HomePage = () => {
           `}
         </style>
       </Navbar>
-
       {/* Contenu principal */}
       <Container className="text-center pt-5" style={{ paddingTop: "100px" }}>
         {/* Carrousel d'images */}

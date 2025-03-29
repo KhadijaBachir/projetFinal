@@ -1,8 +1,8 @@
 import { collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, where } from "firebase/firestore";
-import { db, auth } from "../firebaseConfig"; // Importez `auth` pour récupérer l'ID de l'utilisateur connecté
+import { db, auth } from "../firebaseConfig";
 
 /**
- * Ajouter un défi utilisateur à Firestore
+ * Ajoute un défi utilisateur à Firestore
  * @param {string} name - Nom du défi
  * @param {string} description - Description du défi
  * @param {string} category - Catégorie du défi
@@ -11,16 +11,16 @@ import { db, auth } from "../firebaseConfig"; // Importez `auth` pour récupére
  */
 export const addUserChallenge = async (name, description, category, color) => {
   try {
-    const userId = auth.currentUser?.uid; // Récupérer l'ID de l'utilisateur connecté
+    const userId = auth.currentUser?.uid;
     if (!userId) throw new Error("Utilisateur non connecté !");
 
     const newChallenge = {
-      name, // Nom du défi
-      description, // Description du défi
-      category, // Catégorie du défi
-      color, // Couleur du défi
-      createdAt: new Date().toISOString(), // Date de création au format ISO
-      userId, // ID de l'utilisateur
+      name,
+      description,
+      category,
+      color,
+      userId,
+      createdAt: new Date().toISOString()
     };
 
     const docRef = await addDoc(collection(db, "userChallenges"), newChallenge);
@@ -32,20 +32,22 @@ export const addUserChallenge = async (name, description, category, color) => {
   }
 };
 
+
+
 /**
- * Récupérer les défis utilisateur par catégorie
+ * Récupère les défis utilisateur par catégorie
  * @param {string} category - Catégorie des défis à récupérer
  * @param {function} callback - Fonction de rappel pour traiter les défis récupérés
  * @returns {function} - Fonction pour désabonner l'écouteur
  */
 export const getUserChallenges = (category, callback) => {
-  const userId = auth.currentUser?.uid; // Récupérer l'ID de l'utilisateur connecté
+  const userId = auth.currentUser?.uid;
   if (!userId) throw new Error("Utilisateur non connecté !");
 
   const q = query(
     collection(db, "userChallenges"),
     where("category", "==", category),
-    where("userId", "==", userId) // Filtrer par utilisateur
+    where("userId", "==", userId)
   );
 
   const unsubscribe = onSnapshot(
@@ -55,18 +57,18 @@ export const getUserChallenges = (category, callback) => {
       querySnapshot.forEach((doc) => {
         challengesData.push({ id: doc.id, ...doc.data() });
       });
-      callback(challengesData); // Appeler la fonction de rappel avec les données
+      callback(challengesData);
     },
     (error) => {
       console.error("Erreur lors de la récupération des défis : ", error);
     }
   );
 
-  return unsubscribe; // Retourner la fonction de désabonnement
+  return unsubscribe;
 };
 
 /**
- * Supprimer un défi utilisateur
+ * Supprime un défi utilisateur
  * @param {string} challengeId - ID du défi à supprimer
  * @returns {Promise<void>}
  */
@@ -81,9 +83,9 @@ export const deleteUserChallenge = async (challengeId) => {
 };
 
 /**
- * Mettre à jour un défi utilisateur
+ * Met à jour un défi utilisateur
  * @param {string} challengeId - ID du défi à mettre à jour
- * @param {object} updatedData - Nouvelles données du défi (ex: { name: "Nouveau nom", description: "Nouvelle description" })
+ * @param {object} updatedData - Nouvelles données du défi
  * @returns {Promise<void>}
  */
 export const updateUserChallenge = async (challengeId, updatedData) => {
