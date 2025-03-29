@@ -75,16 +75,31 @@ const MOTIVATION = {
     "Rappelle-toi pourquoi tu as commencé 🌟"
   ],
   videos: [
-    "https://www.youtube.com/embed/DIxjewEpjYU",
-    "https://www.youtube.com/embed/gcRXpPSOSeI",
-    "https://www.youtube.com/embed/oXcxDoab4ro",
-    "https://www.youtube.com/embed/KRbCdd8eGow",
-    "https://www.youtube.com/embed/D6qTPTj9g3I",
-    "https://www.youtube.com/embed/qZcdiUqJjKw",
-    "https://www.youtube.com/embed/loZ6PTeqcHM",
-    "https://www.youtube.com/embed/or91sy5yk8",
-    "https://www.youtube.com/embed/0UpjBtfiet4",
-    "https://www.youtube.com/embed/kkbSY_1JuP8"
+    
+ "https://www.youtube.com/embed/DIxjewEpjYU",
+ "https://www.youtube.com/embed/gcRXpPSOSeI",
+ "https://www.youtube.com/embed/oXcxDoab4ro",
+ "https://www.youtube.com/embed/KRbCdd8eGow",
+ "https://www.youtube.com/embed/D6qTPTj9g3I",
+ "https://www.youtube.com/embed/oXcxDoab4ro",
+ "https://www.youtube.com/embed/KRbCdd8eGow",
+ "https://www.youtube.com/embed/D6qTPTj9g3I",
+ "https://www.youtube.com/embed/qZcdiUqJjKw",
+ "https://www.youtube.com/embed/loZ6PTeqcHM",
+ "https://www.youtube.com/embed/or91sy5yk8",
+ "https://www.youtube.com/embed/0UpjBtfiet4",
+ "https://www.youtube.com/embed/=RzakMIZJ0YI",
+ "https://www.youtube.com/embed/kkbSY_1JuP8",
+ "https://www.youtube.com/embed/RNiGMrdElPw",
+ "https://www.youtube.com/embed/1ujwZKjs-pQ",
+ "https://www.youtube.com/embed/gyc_rOe8DcE",
+ "https://www.youtube.com/embed/leo15qrGx_o",    
+ "https://www.youtube.com/embed/-NffRBbULDE",
+ "https://www.youtube.com/embed/Bw6tW08eOhs",
+ "https://www.youtube.com/embed/7PA6SX4w5F8",
+ "https://www.youtube.com/embed/5pP53OfR3hs",
+ "https://www.youtube.com/embed/IxPoeXOnGkU",
+ "https://www.youtube.com/embed/KJED_W79V14"
   ]
 };
 
